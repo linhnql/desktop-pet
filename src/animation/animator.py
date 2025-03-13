@@ -3,53 +3,38 @@ from src import logger
 from .animation_states import AnimationStates
 from .animation import Animation
 
-
 class Animator:
-    """Holds information that is needed to play animations"""
-
-    frame_number: int
-    """Current frame of the animation"""
-    state: AnimationStates
-    """Current animation state (ie the animation that should be playing"""
-    animations: Dict[AnimationStates, Animation]
-    """All supported animations"""
-    repititions: int
-    """The current repitition of an animation that this is on"""
-
-    def __init__(
-        self,
-        frame_number: int,
-        state: AnimationStates,
-        animations: Dict[AnimationStates, Animation],
-        repititions=0,
-    ):
-        """
-        Args:
-            frame_number (int): Current frame number of the animation
-            state (AnimationStates): Current animation state
-            animations (Dict[AnimationStates, Animation]): All possible animations to choose from
-            repititions (int): The current repitation of a animation that we are on. Defaults to 0.
-        """
+    def __init__(self, frame_number: int, state: AnimationStates, animations: Dict[AnimationStates, Animation], repititions=0):
         self.frame_number = frame_number
         self.state = state
         self.animations = animations
         self.repititions = repititions
+        self.time_accumulator = 0  # Theo dõi thời gian tích lũy
+
+    def update(self, delta_time: float) -> None:
+        """Cập nhật frame dựa trên thời gian thực tế."""
+        current_animation = self.animations[self.state]
+        self.time_accumulator += delta_time * 1000  # Chuyển sang ms
+
+        # Lấy thời gian của khung hình hiện tại
+        frame_duration = current_animation.get_frame_duration(self.frame_number)
+
+        # Nếu thời gian tích lũy vượt quá thời gian khung hình, chuyển sang khung tiếp theo
+        while self.time_accumulator >= frame_duration:
+            self.time_accumulator -= frame_duration
+            self.frame_number += 1
+
+            # Kiểm tra nếu hết chu kỳ hoạt ảnh
+            if self.frame_number >= len(current_animation.frames):
+                self.frame_number = 0
+                self.state = current_animation.next(self)
 
     def set_animation_state(self, state: AnimationStates) -> bool:
-        """Update the state and reset variables that change with each animation
-
-        Args:
-            state (AnimationStates): state to set
-
-        Returns: Whether or not the state was changed
-        """
-        # If the state is the same, then do nothing
-        # As we don't want the animation to keep reseting
-        logger.debug(f"{self.state.__repr__()} changing to {state.__repr__()}")
         if state == self.state:
             return False
         self.frame_number = 0
         self.repititions = 0
+        self.time_accumulator = 0
         self.state = state
         return True
 

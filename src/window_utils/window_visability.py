@@ -34,11 +34,11 @@ def show_in_tray(window: tk.Tk) -> pystray.Icon:
         show_window(window)
         window.mainloop()
 
-    icon = pystray.Icon("DesktopPet")
+    icon = pystray.Icon("Totoro ❤️ Lu")
     icon.menu = Menu(
         item("exit", lambda: exit_action(icon)), item("show", show_action, default=True)
     )
     icon.icon = Image.open(os.path.join(Path().resolve(), "icon.ico"))
-    icon.title = "DesktopPet"
+    icon.title = "Totoro ❤️ Lu"
     icon.run()
     return icon

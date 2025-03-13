@@ -1,13 +1,8 @@
 import tkinter as tk
-from PIL import Image
 from .animation import AnimationStates, Animator, get_animations
 from src.pets import Pet
 from screeninfo import get_monitors
-from xml.dom import minidom
-import distutils.util
 from src import logger
-import pathlib
-import os
 from .window_utils import configure_window, show_window
 from .config_reader import XMLReader
 

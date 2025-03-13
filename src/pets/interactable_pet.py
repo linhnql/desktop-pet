@@ -84,7 +84,7 @@ class InteractablePet(SimplePet):
     def on_tick(self):
         """Draw the current animation"""
         self.update()
-        frame = super().get_curent_animation_frame()
+        frame = super().get_current_animation_frame()
         super().set_geometry()
         self.canvas.label.configure(image=frame)
         self.canvas.window.after(1, self.handle_event)
@@ -98,8 +98,8 @@ class InteractablePet(SimplePet):
         """Mouse 1 click"""
         # Try to visually indicate that the pet has been grabbed, but only
         # if the animation exists
-        if AnimationStates.GRABBED in self.animator.animations:
-            self.set_animation_state(AnimationStates.GRABBED)
+        if AnimationStates.HERO in self.animator.animations:
+            self.set_animation_state(AnimationStates.HERO)
 
     def stop_move(self, event):
         """Mouse 1 release"""        

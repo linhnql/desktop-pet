@@ -23,7 +23,12 @@ class AnimationStates(Enum):
     WALK_POSITIVE_RAIN = auto()
     #DANCE
     LOVE = auto()
+    DANCE = auto()
     DRUM = auto()
+    HERO = auto()
+    GUITAR = auto()
+    SWIM_RIGHT = auto()
+    SWIM_LEFT = auto()
     IDLE_TO_GRABBED = auto()  # OPTIONAL
     GRABBED = auto()
     GRAB_TO_FALL = auto()  # OPTIONAL

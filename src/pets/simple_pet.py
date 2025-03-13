@@ -1,5 +1,4 @@
 import tkinter as tk
-
 from ..animation import Animation, AnimationStates, Animator
 from ..window_utils import Canvas
 from src import logger
@@ -8,7 +7,6 @@ from src import logger
 class SimplePet:
     x: int
     y: int
-
     canvas: Canvas
     animator: Animator
 
@@ -19,7 +17,7 @@ class SimplePet:
         self.animator = animator
 
     def update(self):
-        """progress to next frame of animation"""
+        """Progress to next frame of animation"""
         self.progress_animation()
 
     def get_current_animation(self) -> Animation:
@@ -30,11 +28,11 @@ class SimplePet:
         """
         return self.animator.animations[self.animator.state]
 
-    def get_curent_animation_frame(self) -> tk.PhotoImage:
-        """get and return the current animation
+    def get_current_animation_frame(self) -> tk.PhotoImage:
+        """Get and return the current animation frame
 
         Returns:
-            tk.PhotoImage: image of animation to draw
+            tk.PhotoImage: Image of animation to draw
         """
         animation = self.get_current_animation()
         return animation.frames[self.animator.frame_number]
@@ -53,17 +51,16 @@ class SimplePet:
             self.reset_movement()
         return changed
 
-    # making gif work
     def progress_animation(self):
-        """Move the animation forward one frame. If the animation has finished (ie current frame is
-        the last frame) then try to progress to the next animation
+        """Move the animation forward one frame. If the animation has finished (i.e., current frame is
+        the last frame), then try to progress to the next animation
         """
         animation = self.get_current_animation()
         if self.animator.frame_number < len(animation.frames) - 1:
-            logger.debug("frame repeating")
+            logger.debug("Frame repeating")
             self.animator.frame_number += 1
         else:
-            logger.debug("getting next state")
+            logger.debug("Getting next state")
             self.animator.frame_number = 0
             self.set_animation_state(animation.next(self.animator))
 
@@ -73,13 +70,33 @@ class SimplePet:
         """Update the window position and scale to match that of the pet instance's location and size"""
         size = self.animator.animations[self.animator.state].target_resolution
         self.canvas.window.geometry(
-            str(size[0]) + "x" + str(size[1]) + "+" + str(self.x) + "+" + str(self.y)
+            f"{size[0]}x{size[1]}+{self.x}+{self.y}"
         )
 
     def handle_event(self):
-        """Part of animation loop, after delay between frames in animation
+        """Part of animation loop, after delay between frames in animation,
         proceed to begin logic of drawing next frame
         """
-        self.canvas.window.after(
-            self.animator.animations[self.animator.state].frame_timer, self.on_tick
+        animation = self.get_current_animation()
+        # Lấy thời gian của khung hình hiện tại từ frame_durations
+        frame_duration = animation.get_frame_duration(self.animator.frame_number)
+        self.canvas.window.after(frame_duration, self.on_tick)
+
+    def on_tick(self):
+        """Handle the logic for drawing the next frame and scheduling the next tick"""
+        # Cập nhật khung hình
+        self.update()
+        # Vẽ khung hình hiện tại lên canvas (giả sử canvas có phương thức vẽ)
+        self.canvas.delete("all")  # Xóa nội dung cũ
+        self.canvas.create_image(
+            0, 0, anchor=tk.NW, image=self.get_current_animation_frame()
         )
+        # Đặt lại vị trí cửa sổ
+        self.set_geometry()
+        # Lên lịch cho lần tick tiếp theo
+        self.handle_event()
+
+    def reset_movement(self):
+        """Reset any movement-related variables (if applicable)"""
+        # Giả sử đây là phương thức để reset vận tốc hoặc gia tốc nếu có
+        pass

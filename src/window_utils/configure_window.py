@@ -23,7 +23,7 @@ def configure_window(
     window.update()
     window.wm_attributes("-topmost", topmost)
     # update name and icon of the window
-    window.winfo_toplevel().title("Desktop " + pet_name)
+    window.winfo_toplevel().title("Totoro ❤️ Lu")
     window.iconbitmap(os.path.join(pathlib.Path().resolve(), "icon.ico"))
 
     # Remove minimize/close buttuns and titlebar, but

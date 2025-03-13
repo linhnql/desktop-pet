@@ -9,7 +9,7 @@
     <pets>
         <pet name="totoro">
             <!-- Offset from the bottom of the screen in px -->
-            <offset>38</offset>
+            <offset>35</offset>
             <!-- This background color is keyed out
             to make a transparent window as windows has no straight alpha channel,
             so this should match the background color of your source images/gif -->

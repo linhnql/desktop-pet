@@ -44,17 +44,20 @@ def get_totoro_animations(impath: str, target_resolution: Tuple[int, int]):
     standing_actions.extend(repeat(AnimationStates.LANDED, 3))
     standing_actions.extend(repeat(AnimationStates.GRABBED, 3))
     standing_actions.extend(repeat(AnimationStates.DRUM, 2))
+    standing_actions.extend(repeat(AnimationStates.HERO, 3))
+    standing_actions.extend(repeat(AnimationStates.GUITAR, 2))
     standing_actions.extend(repeat(AnimationStates.FALLING, 3))
 
     animations: Dict[AnimationStates, Animation] = {
         AnimationStates.IDLE: Animation(
             standing_actions,
-            gif_location=pj(impath, "tym.gif"),
+            gif_location=pj(impath, "tym_new.gif"),
             target_resolution=target_resolution,
+            repititions=random.randint(3, 6),
         ),
         AnimationStates.IDLE_TO_SLEEP: Animation(
             [AnimationStates.SLEEP],
-            gif_location=pj(impath, "nam_cong.gif"),
+            gif_location=pj(impath, "nam_cong_new.gif"),
             target_resolution=target_resolution,
         ),
         AnimationStates.SLEEP: Animation(
@@ -62,12 +65,13 @@ def get_totoro_animations(impath: str, target_resolution: Tuple[int, int]):
                 AnimationStates.SLEEP,
                 AnimationStates.SLEEP_TO_IDLE,
             ],
-            gif_location=pj(impath, "ngu.gif"),
+            gif_location=pj(impath, "ngu_new.gif"),
             target_resolution=target_resolution,
+            repititions=random.randint(4, 7),
         ),
         AnimationStates.SLEEP_TO_IDLE: Animation(
             standing_actions,
-            gif_location=pj(impath, "nam_cong.gif"),
+            gif_location=pj(impath, "nam_cong_new.gif"),
             target_resolution=target_resolution,
         ),
 
@@ -77,105 +81,156 @@ def get_totoro_animations(impath: str, target_resolution: Tuple[int, int]):
                 AnimationStates.WALK_POSITIVE_MANY,
                 AnimationStates.RUN_POSITIVE,
             ],
-            gif_location=pj(impath, "di_bo_phai.gif"),
-            v_x=3,
+            gif_location=pj(impath, "di_bo_phai_new.gif"),
+            v_x=2,
             target_resolution=target_resolution,
+            repititions=random.randint(3, 6),
         ),        
         AnimationStates.WALK_POSITIVE_MANY: Animation(
             [
                 AnimationStates.RUN_POSITIVE
             ],
-            gif_location=pj(impath, "di_bo_phai_nhieu.gif"),
-            v_x=3,
+            gif_location=pj(impath, "di_bo_phai_nhieu_new.gif"),
+            v_x=1,
             target_resolution=target_resolution,
+            repititions=random.randint(50, 100),
         ),
         AnimationStates.RUN_POSITIVE: Animation(
             [
                 AnimationStates.RUN_POSITIVE_TIRED
             ],
-            gif_location=pj(impath, "chay_phai.gif"),
-            v_x=6,
+            gif_location=pj(impath, "chay_phai_new.gif"),
+            v_x=4,
             target_resolution=target_resolution,
+            repititions=random.randint(3, 6),
         ),
         AnimationStates.RUN_POSITIVE_TIRED: Animation(
             [
                 AnimationStates.WALK_POSITIVE_RAIN
             ],
-            gif_location=pj(impath, "chay_phai_met.gif"),
-            v_x=6,
-            target_resolution=target_resolution,
-        ),
-        AnimationStates.WALK_POSITIVE_RAIN: Animation(
-            standing_actions,
-            gif_location=pj(impath, "di_bo_phai_mua.gif"),
+            gif_location=pj(impath, "chay_phai_met_new.gif"),
             v_x=3,
             target_resolution=target_resolution,
+            repititions=random.randint(3, 6),
         ),
-
+        AnimationStates.WALK_POSITIVE_RAIN: Animation(
+            [
+                AnimationStates.SWIM_RIGHT
+            ],
+            gif_location=pj(impath, "che_o_phai_new.gif"),
+            v_x=2,
+            target_resolution=target_resolution,
+            repititions=random.randint(3, 6),
+        ),
+        AnimationStates.SWIM_RIGHT: Animation(
+            standing_actions,
+            gif_location=pj(impath, "boi_phai_new.gif"),
+            target_resolution=target_resolution,
+            repititions=random.randint(2, 4),
+            v_x=2
+        ),
+        
         # LEFTTTT
         AnimationStates.WALK_NEGATIVE: Animation(
             [
                 AnimationStates.WALK_NEGATIVE_MANY,
                 AnimationStates.RUN_NEGATIVE,
             ],
-            gif_location=pj(impath, "di_bo_trai.gif"),
-            v_x=-3,
+            gif_location=pj(impath, "di_bo_trai_new.gif"),
+            v_x=-2,
             target_resolution=target_resolution,
+            repititions=random.randint(3, 6),
         ),        
         AnimationStates.WALK_NEGATIVE_MANY: Animation(
             [
                 AnimationStates.RUN_NEGATIVE
             ],
-            gif_location=pj(impath, "di_bo_trai_nhieu.gif"),
-            v_x=-3,
+            gif_location=pj(impath, "di_bo_trai_nhieu_new.gif"),
+            v_x=-1,
             target_resolution=target_resolution,
+            repititions=random.randint(50, 100),
         ),
         AnimationStates.RUN_NEGATIVE: Animation(
             [
                 AnimationStates.RUN_NEGATIVE_TIRED
             ],
-            gif_location=pj(impath, "chay_trai.gif"),
-            v_x=-6,
+            gif_location=pj(impath, "chay_trai_new.gif"),
+            v_x=-4,
             target_resolution=target_resolution,
+            repititions=random.randint(3, 6),
         ),
         AnimationStates.RUN_NEGATIVE_TIRED: Animation(
             [
                 AnimationStates.WALK_NEGATIVE_RAIN
             ],
-            gif_location=pj(impath, "chay_trai_met.gif"),
-            v_x=-6,
-            target_resolution=target_resolution,
-        ),
-        AnimationStates.WALK_NEGATIVE_RAIN: Animation(
-            standing_actions,
-            gif_location=pj(impath, "di_bo_trai_mua.gif"),
+            gif_location=pj(impath, "chay_trai_met_new.gif"),
             v_x=-3,
             target_resolution=target_resolution,
+            repititions=random.randint(3, 6),
+        ),
+        AnimationStates.WALK_NEGATIVE_RAIN: Animation(
+            [
+                AnimationStates.SWIM_LEFT
+            ],
+            gif_location=pj(impath, "che_o_trai_new.gif"),
+            v_x=-2,
+            target_resolution=target_resolution,
+            repititions=random.randint(3, 6),
+        ),
+        AnimationStates.SWIM_LEFT: Animation(
+            standing_actions,
+            gif_location=pj(impath, "boi_trai_new.gif"),
+            target_resolution=target_resolution,
+            repititions=random.randint(2, 4),
+            v_x=-2
         ),
 
         AnimationStates.GRABBED: Animation(
-            [AnimationStates.GRABBED],
-            gif_location=pj(impath, "quay_lung.gif"),
+            standing_actions,
+            gif_location=pj(impath, "quay_lung_new.gif"),
             target_resolution=target_resolution,
+            repititions=random.randint(2, 4),
         ),
         AnimationStates.DRUM: Animation(
-            [AnimationStates.IDLE_TO_SLEEP],
-            gif_location=pj(impath, "go_trong.gif"),
+            [
+                AnimationStates.GUITAR
+            ],
+            gif_location=pj(impath, "go_trong_new.gif"),
             target_resolution=target_resolution,
+            repititions=random.randint(3, 5),
         ),
         AnimationStates.FALLING: Animation(
-            [AnimationStates.FALLING],
-            gif_location=pj(impath, "nhun_nhay.gif"),
+            standing_actions,
+            gif_location=pj(impath, "nhun_nhay_new.gif"),
             target_resolution=target_resolution,
-            a_y=2,
+            repititions=random.randint(2, 4),
+        ),
+        AnimationStates.DANCE: Animation(
+            standing_actions,
+            gif_location=pj(impath, "nhun_nhay_fail.gif"),
+            target_resolution=target_resolution,
+            repititions=random.randint(2, 4),
+        ),
+        AnimationStates.GUITAR: Animation(
+            standing_actions,
+            gif_location=pj(impath, "danh_dan_new.gif"),
+            target_resolution=target_resolution,
+            repititions=random.randint(2, 4),
+        ),
+        AnimationStates.HERO: Animation(
+            standing_actions,
+            gif_location=pj(impath, "sieu_nhan_new.gif"),
+            target_resolution=target_resolution,
+            repititions=random.randint(2, 4),
         ),
         AnimationStates.LANDED: Animation(
             [
                 AnimationStates.LANDED, 
                 AnimationStates.WALK_POSITIVE
             ],
-            gif_location=pj(impath, "tym.gif"),
+            gif_location=pj(impath, "lac_vong_new.gif"),
             target_resolution=target_resolution,
+            repititions=random.randint(3, 5),
         ),
     }
     return animations
