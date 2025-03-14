@@ -34,3 +34,12 @@ class AnimationStates(Enum):
     GRAB_TO_FALL = auto()  # OPTIONAL
     FALLING = auto()
     LANDED = auto()
+
+    #new
+    DRUM_2 = auto()
+    WORK = auto()
+    QUAY = auto()
+    WALK_RIGHT = auto()
+    WALK_LEFT = auto()
+    AE_QUAY = auto()
+    TAP_TA = auto()

@@ -10,10 +10,7 @@ from .animation_states import AnimationStates
 
 
 class Animation:
-    """Defines the event numbers for this animation
-    and the ways this animation can transfer to the
-    next animation
-    """
+    """Defines the event numbers for this animation and the ways this animation can transfer to the next animation"""
 
     next_animation_states: List[AnimationStates]
     """possible animations for after this animation"""
@@ -28,6 +25,9 @@ class Animation:
     repititions: int
     """How many times to repeat given animation before moving onto the next animation"""
     target_resolution: Tuple[int, int]
+    list_message: List[str]  # Thêm danh sách message cho mỗi animation
+    """List of messages to display in tooltip"""
+    show_tooltip: bool  # Thêm biến để bật/tắt tooltip
 
     should_run_preprocessing = False
     """Whether or not to run preprocessing, overwrites saved images. Defaults to False"""
@@ -47,6 +47,8 @@ class Animation:
         frame_multiplier: int = 1,
         target_resolution: Tuple[int, int] = (100, 100),
         reverse: bool = False,
+        list_message: List[str] = ["Chào Luuuu!", "Tớ là Totoro!", "Love you <3"],  # Thêm tham số list_message
+        show_tooltip: bool = True,       # Thêm tham số để bật/tắt tooltip
     ):
         """
         Args:
@@ -63,6 +65,8 @@ class Animation:
             repititions (int, optional): How many times this animation should repeat.
             frame_multiplier (int, optional): How many times to duplicate frames (for non-GIF sources).
             reverse (bool, optional): Whether or not to reverse the loaded frames.
+            list_message (List[str], optional): List of messages for tooltip display.
+            show_tooltip (bool, optional): Whether to show tooltip or not. Defaults to True.
         """
         self.next_animation_states = next_animation_states
         self.v_x = v_x
@@ -70,6 +74,8 @@ class Animation:
         self.a_x = a_x
         self.a_y = a_y
         self.repititions = repititions
+        self.list_message = list_message if list_message is not None else []  # Khởi tạo list_message
+        self.show_tooltip = show_tooltip  # Khởi tạo biến bật/tắt tooltip
 
         # Get and set the frames and their durations
         if name is None:
@@ -82,14 +88,9 @@ class Animation:
             if gif_location is not None:
                 frames, durations = Animation.load_gif_to_frames(gif_location)
                 self.frame_durations = durations  # Lưu thời gian gốc của GIF
-            # elif images_location is not None:
-            #     frames = Animation.load_images_to_frames(images_location)
-            #     # Nếu không có GIF, dùng frame_multiplier để đặt thời gian mặc định 100ms
-            #     self.frame_durations = [100] * len(frames)
             else:
                 raise Exception("Received neither frames nor locations to load the frames.")
         else:
-            # Nếu frames được cung cấp trực tiếp, mặc định mỗi khung 100ms
             self.frame_durations = [100] * len(frames)
 
         if len(frames) == 0:
@@ -102,7 +103,6 @@ class Animation:
             frames.reverse()
             self.frame_durations.reverse()
 
-        # Áp dụng frame_multiplier (chỉ cho non-GIF hoặc khi cần điều chỉnh)
         if gif_location is None and frame_multiplier > 1:
             self.frames = [x for item in frames for x in repeat(item, frame_multiplier)]
             self.frame_durations = [d for d in self.frame_durations for _ in range(frame_multiplier)]
@@ -111,14 +111,7 @@ class Animation:
 
     @staticmethod
     def load_gif_to_frames(path: str) -> Tuple[List[tk.PhotoImage], List[int]]:
-        """Load frames and their durations from a GIF file.
-
-        Args:
-            path (str): Path to the GIF file.
-
-        Returns:
-            Tuple[List[tk.PhotoImage], List[int]]: List of frames and their durations in ms.
-        """
+        """Load frames and their durations from a GIF file."""
         file = Image.open(path)
         number_of_frames = file.n_frames
         frames = []
@@ -126,34 +119,13 @@ class Animation:
 
         for i in range(number_of_frames):
             file.seek(i)
-            # Đọc thời gian của từng khung hình từ metadata (mặc định 100ms nếu không có)
-            duration = file.info.get('duration', 100)  # Thời gian tính bằng ms
+            duration = file.info.get('duration', 100)
             frame = tk.PhotoImage(file=path, format="gif -index %i" % i)
             frames.append(frame)
-            durations.append(int(duration))  # Đảm bảo là số nguyên
+            durations.append(int(duration))
 
         file.close()
         return frames, durations
-
-    # @staticmethod
-    # def load_images_to_frames(path: str) -> List[tk.PhotoImage]:
-    #     """Load images from a folder into frames (default 100ms duration per frame).
-
-    #     Args:
-    #         path (str): Path to the folder with the images.
-
-    #     Returns:
-    #         List[tk.PhotoImage]: List of frames.
-    #     """
-    #     files = [
-    #         join(path, f) for f in sorted(listdir(path))
-    #         if isfile(join(path, f)) and f.split(".").pop().lower() == "png"
-    #     ]
-    #     if Animation.should_run_preprocessing:
-    #         for file_path in files:
-    #             Animation.remove_partial_transparency_png(file_path)
-
-    #     return [tk.PhotoImage(file=file_path) for file_path in files]
 
     @staticmethod
     def apply_target_resolution(frames: List[tk.PhotoImage], target_resolution: Tuple[int, int]) -> List[tk.PhotoImage]:
@@ -211,6 +183,12 @@ class Animation:
     def get_frame_duration(self, frame_index: int) -> int:
         """Return the duration of the frame at the given index."""
         return self.frame_durations[frame_index % len(self.frame_durations)]
+
+    def get_random_message(self) -> str:
+        """Return a random message from the list_message."""
+        if self.list_message:
+            return random.choice(self.list_message)
+        return ""
 
     def __repr__(self):
         return f"<Animation: {len(self.frames)} frames with variable durations>"
