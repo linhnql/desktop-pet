@@ -26,7 +26,7 @@ class InteractablePet(SimplePet):
         
         # Start checking for window focus
         self.check_desktop_active()
-        self.app_title = self.canvas.window.title().lower()
+        self.app_title = self.canvas.window.title()
 
     def keep_on_top(self):
         self.canvas.window.wm_attributes("-topmost", True)
@@ -47,36 +47,34 @@ class InteractablePet(SimplePet):
         try:
             class_name = win32gui.GetClassName(foreground_window)
             window_title = win32gui.GetWindowText(foreground_window)
-            logger.info(f"Foreground window: handle={foreground_window}, class={class_name}, title={window_title}")
+            # logger.info(f"Foreground window: handle={foreground_window}, class={class_name}, title={window_title}")
             
-            title_lower = window_title.lower()
-            
-            if self.app_title in title_lower:
+            if self.app_title == window_title:
                 # logger.info(f"App detected as desktop (title contains '{self.app_title}')")
                 return True
             
             desktop_classes = {
-                "Progman",                      # Program Manager - Desktop chính trên Windows cũ (XP, 7, 10)
-                "WorkerW",                      # Wallpaper layer - Thường xuất hiện khi desktop hiển thị (Windows 7, 10)
-                "SysListView32",                # Danh sách icon trên desktop (con của Progman)
-                "Shell_TrayWnd",                # Taskbar chính (Start menu, system tray)
-                "Static",                       # Cửa sổ ẩn khi minimize tất cả (dựa trên log của bạn)
-                "DesktopWindowXamlSource",      # Desktop trên Windows 11 (XAML-based)
-                "NotifyIconOverflowWindow",     # System tray overflow (khi nhấp vào icon ẩn trong tray)
-                "Windows.UI.Core.CoreWindow",   # Core UI window trên Windows 10/11 (UWP-related desktop components)
-                "Shell_SecondaryTrayWnd",       # Taskbar phụ trên đa màn hình (Windows 10/11)
-                "DV2ControlHost",               # Desktop View control host (liên quan đến Start menu trên Windows 7/8)
-                "Shell_DLL_DefView",            # Default view của desktop (con của Progman trên một số hệ thống)
-                "MultitaskingViewFrame",        # Task View hoặc Alt+Tab trên Windows 10/11
-                "TaskListThumbnailWnd",         # Thumbnail preview khi hover taskbar
+                "Progman",                      # Program Manager - Main desktop on older Windows (XP, 7, 10)
+                "WorkerW",                      # Wallpaper layer - Often appears when desktop is visible (Windows 7, 10)
+                "SysListView32",                # List of icons on desktop (child of Progman)
+                "Shell_TrayWnd",                # Main taskbar (Start menu, system tray)
+                "Static",                       # Hidden window when all apps are minimized (based on your log)
+                "DesktopWindowXamlSource",      # Desktop on Windows 11 (XAML-based)
+                "NotifyIconOverflowWindow",     # System tray overflow (when clicking hidden icons in tray)
+                "Windows.UI.Core.CoreWindow",   # Core UI window on Windows 10/11 (UWP-related desktop components)
+                "Shell_SecondaryTrayWnd",       # Secondary taskbar on multi-monitor setups (Windows 10/11)
+                "DV2ControlHost",               # Desktop View control host (related to Start menu on Windows 7/8)
+                "Shell_DLL_DefView",            # Default view of desktop (child of Progman on some systems)
+                "MultitaskingViewFrame",        # Task View or Alt+Tab interface on Windows 10/11
+                "TaskListThumbnailWnd",         # Thumbnail preview when hovering over taskbar
                 "TrayNotifyWnd",                # System tray notification area
-                "TrayClockWClass",              # Đồng hồ trong system tray
-                "ReBarWindow32",                # Thanh công cụ trong taskbar
-                "CiceroUIWndFrame",             # Input method editor (IME) window (có thể xuất hiện trên desktop)
-                "ApplicationManager_DesktopShellWindow",  # Desktop shell trên Windows 11 (ít phổ biến)
-                "Start",                        # Start menu trên Windows 10/11 khi mở
-                "ExplorerWClass",               # Explorer window (có thể liên quan đến desktop trên một số cấu hình)
-                "CabinetWClass",                # File Explorer window (nếu Explorer hiển thị desktop)
+                "TrayClockWClass",              # Clock in system tray
+                "ReBarWindow32",                # Toolbar in taskbar
+                "CiceroUIWndFrame",             # Input method editor (IME) window (may appear on desktop)
+                "ApplicationManager_DesktopShellWindow",  # Desktop shell on Windows 11 (less common)
+                "Start",                        # Start menu on Windows 10/11 when opened
+                "ExplorerWClass",               # Explorer window (may relate to desktop on some configurations)
+                "CabinetWClass",                # File Explorer window (if Explorer displays desktop)
                 "ApplicationFrameWindow",       # UWP app frame (Windows 11 shell components)
             }
             if class_name in desktop_classes:
