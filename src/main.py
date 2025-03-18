@@ -16,7 +16,7 @@ def start_program(current_pet: str = None):
     Raises:
         Exception: [description]
     """
-    logger.debug("Loading general configuration from XML")
+    # logger.debug("Loading general configuration from XML")
     ### General Configuration
     config = XMLReader()
     current_pet = current_pet
@@ -25,11 +25,11 @@ def start_program(current_pet: str = None):
 
     ### Animation Specific Configuration
     # Find the desired pet
-    logger.debug('Finding "current_pet" configurations from the XML')
+    # logger.debug('Finding "current_pet" configurations from the XML')
     pet_config = config.getMatchingPetConfigurationClean(current_pet)
 
     ### Window Configuration
-    logger.debug("Creating tkinter window/config")
+    # logger.debug("Creating tkinter window/config")
     # Get info on the primary monitor (that is where the pet will be)
     monitor = get_monitors()[0]
     resolution = {
@@ -42,7 +42,7 @@ def start_program(current_pet: str = None):
     )
 
     ## Load the animations.
-    logger.debug("Starting to load animations")
+    # logger.debug("Starting to load animations")
     animations = get_animations(
         current_pet, pet_config.target_resolution, should_run_preprocessing
     )
@@ -59,7 +59,7 @@ def start_program(current_pet: str = None):
 
     ## Initialize pet
     # Create the desktop pet
-    logger.debug("Create pet")
+    # logger.debug("Create pet")
     x = int(canvas.resolution["width"] / 2)
     y = int(canvas.resolution["height"])
     pet = Pet(x, y, canvas=canvas, animator=animator)
@@ -67,7 +67,7 @@ def start_program(current_pet: str = None):
     canvas.label.bind("<ButtonPress-1>", pet.start_move)
     canvas.label.bind("<ButtonRelease-1>", pet.stop_move)
     canvas.label.bind("<B1-Motion>", pet.do_move)
-    logger.info(pet.__repr__())
+    # logger.info(pet.__repr__())
 
     # Begin the main loop
     window.after(1, pet.on_tick)

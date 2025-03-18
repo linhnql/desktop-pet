@@ -58,13 +58,13 @@ def get_totoro_animations(impath: str, target_resolution: Tuple[int, int]):
             gif_location=pj(impath, "tym_new.gif"),
             target_resolution=target_resolution,
             repititions=random.randint(3, 6),
-            list_message=["Xin chào!", "Tớ là Totoro!", "Lu XINH <3"],  # Danh sách message
+            list_message=["Xin chào!", "Tớ là Totoro!", "Chào Lu xinh <3"],  # Danh sách message
         ),
         AnimationStates.IDLE_TO_SLEEP: Animation(
             [AnimationStates.SLEEP],
             gif_location=pj(impath, "nam_cong_new.gif"),
             target_resolution=target_resolution,
-            list_message=["Đừng lười", "Tập thể dục i"],  # Danh sách message
+            list_message=["Đừng có lười", "Tập thể dục i"],  # Danh sách message
         ),
         AnimationStates.SLEEP: Animation(
             [
@@ -74,7 +74,7 @@ def get_totoro_animations(impath: str, target_resolution: Tuple[int, int]):
             gif_location=pj(impath, "ngu_new.gif"),
             target_resolution=target_resolution,
             repititions=random.randint(4, 7),
-            list_message=["Đừng làm phiền", "Yên ngủ coi!!"]
+            list_message=["Đừng làm phiền", "Yên ngủ coii"]
         ),
         AnimationStates.SLEEP_TO_IDLE: Animation(
             standing_actions,
@@ -112,7 +112,7 @@ def get_totoro_animations(impath: str, target_resolution: Tuple[int, int]):
             gif_location=pj(impath, "di_bo_phai_nhieu_new.gif"),
             v_x=1,
             target_resolution=target_resolution,
-            repititions=random.randint(2000, 3000),
+            # repititions=random.randint(2000, 3000),
             list_message=["Brum brumm"],  # Danh sách message
         ),
         AnimationStates.RUN_POSITIVE: Animation(
@@ -123,7 +123,7 @@ def get_totoro_animations(impath: str, target_resolution: Tuple[int, int]):
             v_x=4,
             target_resolution=target_resolution,
             repititions=random.randint(3, 6),
-            list_message=["Đố anh bắt được em"],  # Danh sách message
+            list_message=["Đố deadline bắt được tui"],  # Danh sách message
         ),
         AnimationStates.RUN_POSITIVE_TIRED: Animation(
             [
@@ -143,7 +143,7 @@ def get_totoro_animations(impath: str, target_resolution: Tuple[int, int]):
             v_x=2,
             target_resolution=target_resolution,
             repititions=random.randint(3, 6),
-            list_message=["Chill đi Lu"],  # Danh sách message
+            list_message=["Mưa ời"],  # Danh sách message
         ),
         AnimationStates.SWIM_RIGHT: Animation(
             standing_actions,
@@ -151,7 +151,7 @@ def get_totoro_animations(impath: str, target_resolution: Tuple[int, int]):
             target_resolution=target_resolution,
             repititions=random.randint(2, 4),
             v_x=2,
-            list_message=["Xin cái tuổi"],  # Danh sách message
+            list_message=["Không kịp mất", "Đuối rồi"],  # Danh sách message
         ),
         
         # LEFTTTT
@@ -183,8 +183,8 @@ def get_totoro_animations(impath: str, target_resolution: Tuple[int, int]):
             gif_location=pj(impath, "di_bo_trai_nhieu_new.gif"),
             v_x=-1,
             target_resolution=target_resolution,
-            repititions=random.randint(2000, 3000),
-            list_message=["Lu xinh Lu xinh Lu xinh"],  # Danh sách message
+            # repititions=random.randint(2000, 3000),
+            list_message=["Lu xinh Lu xinh"],  # Danh sách message
         ),
         AnimationStates.RUN_NEGATIVE: Animation(
             [
@@ -194,7 +194,7 @@ def get_totoro_animations(impath: str, target_resolution: Tuple[int, int]):
             v_x=-4,
             target_resolution=target_resolution,
             repititions=random.randint(3, 6),
-            list_message=["Đố anh bắt được em"],  # Danh sách message
+            list_message=["Trốn lẹ"],  # Danh sách message
         ),
         AnimationStates.RUN_NEGATIVE_TIRED: Animation(
             [
@@ -214,7 +214,7 @@ def get_totoro_animations(impath: str, target_resolution: Tuple[int, int]):
             v_x=-2,
             target_resolution=target_resolution,
             repititions=random.randint(3, 6),
-            list_message=["Chill i Lu"],  # Danh sách message
+            list_message=["Mưa nữa ờiii"],  # Danh sách message
         ),
         AnimationStates.SWIM_LEFT: Animation(
             standing_actions,
@@ -222,7 +222,7 @@ def get_totoro_animations(impath: str, target_resolution: Tuple[int, int]):
             target_resolution=target_resolution,
             repititions=random.randint(2, 4),
             v_x=-2,
-            list_message=["Gà, bơi được chưa"],  
+            list_message=["Về bờ lẹ", "Sắp đuối rồi"],  
         ),
 
         AnimationStates.GRABBED: Animation(
@@ -230,7 +230,7 @@ def get_totoro_animations(impath: str, target_resolution: Tuple[int, int]):
             gif_location=pj(impath, "quay_lung_new.gif"),
             target_resolution=target_resolution,
             repititions=random.randint(2, 4),
-            list_message=["Heheheehe"],  # Danh sách message
+            list_message=["Cấm nhìn"],  # Danh sách message
         ),
         AnimationStates.DRUM: Animation(
             [
@@ -239,7 +239,7 @@ def get_totoro_animations(impath: str, target_resolution: Tuple[int, int]):
             gif_location=pj(impath, "go_trong_new.gif"),
             target_resolution=target_resolution,
             repititions=random.randint(3, 5),
-            list_message=["🎶Bùm! Bùm! Chách!"],  # Danh sách message
+            list_message=["Hết giờ!!!"],  # Danh sách message
         ),
         AnimationStates.FALLING: Animation(
             standing_actions,
@@ -266,21 +266,21 @@ def get_totoro_animations(impath: str, target_resolution: Tuple[int, int]):
             gif_location=pj(impath, "lam_viec.gif"),
             target_resolution=target_resolution,
             repititions=random.randint(3, 6),
-            list_message=["Có làm mới có ăn"],  # Danh sách message
+            list_message=["Tập trung"],  # Danh sách message
         ),
         AnimationStates.QUAY: Animation(
             [AnimationStates.AE_QUAY],
             gif_location=pj(impath, "quay.gif"),
             target_resolution=target_resolution,
             repititions=random.randint(3, 6),
-            list_message=["Múa đi", "nhảy đi"],  # Danh sách message
+            list_message=["Vận động i"],  # Danh sách message
         ),
         AnimationStates.AE_QUAY: Animation(
             standing_actions,
             gif_location=pj(impath, "ae_quay.gif"),
             target_resolution=target_resolution,
             repititions=random.randint(3, 6),
-            list_message=["Quẩy AE"],  # Danh sách message
+            list_message=["Tadaaa..."],  # Danh sách message
         ),
         AnimationStates.TAP_TA: Animation(
             standing_actions,
@@ -294,7 +294,7 @@ def get_totoro_animations(impath: str, target_resolution: Tuple[int, int]):
             gif_location=pj(impath, "sieu_nhan_new.gif"),
             target_resolution=target_resolution,
             repititions=random.randint(3, 6),
-            list_message=["Giải cíu thế giới"],  # Danh sách message
+            list_message=["Cíu thế giới"],  # Danh sách message
         ),
         AnimationStates.DRUM_2: Animation(
             standing_actions,

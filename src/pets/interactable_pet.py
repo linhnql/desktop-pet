@@ -3,6 +3,7 @@ from ..animation import AnimationStates
 from .simple_pet import SimplePet
 from src import logger
 import random
+import win32gui
 
 
 class InteractablePet(SimplePet):
@@ -13,11 +14,96 @@ class InteractablePet(SimplePet):
     tooltip: tk.Toplevel = None
     tooltip_label: tk.Label = None
     tooltip_after_id = None
+    is_desktop_active = True  # Track if desktop is active
 
     def __init__(self, x, y, canvas, animator):
         super().__init__(x, y, canvas, animator)
         self.setup_tooltip()
         self.update_tooltip_content()
+        self.canvas.window.wm_attributes("-topmost", True)
+        self.canvas.window.bind("<FocusOut>", self.on_focus_out)
+        self.keep_on_top()
+        
+        # Start checking for window focus
+        self.check_desktop_active()
+        self.app_title = self.canvas.window.title().lower()
+
+    def keep_on_top(self):
+        self.canvas.window.wm_attributes("-topmost", True)
+        self.canvas.window.after(100, self.keep_on_top)
+
+    def on_focus_out(self, event):
+        self.canvas.window.wm_attributes("-topmost", True)
+        # When focus is lost, hide tooltip
+        self.hide_tooltip()
+
+    def is_on_desktop(self):
+        """
+        Check if the desktop or the app itself (title containing 'Totoro') is active.
+        Returns True if desktop or app is active, False if another application is active.
+        """
+        foreground_window = win32gui.GetForegroundWindow()
+        
+        try:
+            class_name = win32gui.GetClassName(foreground_window)
+            window_title = win32gui.GetWindowText(foreground_window)
+            logger.info(f"Foreground window: handle={foreground_window}, class={class_name}, title={window_title}")
+            
+            title_lower = window_title.lower()
+            
+            if self.app_title in title_lower:
+                # logger.info(f"App detected as desktop (title contains '{self.app_title}')")
+                return True
+            
+            desktop_classes = {
+                "Progman",                      # Program Manager - Desktop chính trên Windows cũ (XP, 7, 10)
+                "WorkerW",                      # Wallpaper layer - Thường xuất hiện khi desktop hiển thị (Windows 7, 10)
+                "SysListView32",                # Danh sách icon trên desktop (con của Progman)
+                "Shell_TrayWnd",                # Taskbar chính (Start menu, system tray)
+                "Static",                       # Cửa sổ ẩn khi minimize tất cả (dựa trên log của bạn)
+                "DesktopWindowXamlSource",      # Desktop trên Windows 11 (XAML-based)
+                "NotifyIconOverflowWindow",     # System tray overflow (khi nhấp vào icon ẩn trong tray)
+                "Windows.UI.Core.CoreWindow",   # Core UI window trên Windows 10/11 (UWP-related desktop components)
+                "Shell_SecondaryTrayWnd",       # Taskbar phụ trên đa màn hình (Windows 10/11)
+                "DV2ControlHost",               # Desktop View control host (liên quan đến Start menu trên Windows 7/8)
+                "Shell_DLL_DefView",            # Default view của desktop (con của Progman trên một số hệ thống)
+                "MultitaskingViewFrame",        # Task View hoặc Alt+Tab trên Windows 10/11
+                "TaskListThumbnailWnd",         # Thumbnail preview khi hover taskbar
+                "TrayNotifyWnd",                # System tray notification area
+                "TrayClockWClass",              # Đồng hồ trong system tray
+                "ReBarWindow32",                # Thanh công cụ trong taskbar
+                "CiceroUIWndFrame",             # Input method editor (IME) window (có thể xuất hiện trên desktop)
+                "ApplicationManager_DesktopShellWindow",  # Desktop shell trên Windows 11 (ít phổ biến)
+                "Start",                        # Start menu trên Windows 10/11 khi mở
+                "ExplorerWClass",               # Explorer window (có thể liên quan đến desktop trên một số cấu hình)
+                "CabinetWClass",                # File Explorer window (nếu Explorer hiển thị desktop)
+                "ApplicationFrameWindow",       # UWP app frame (Windows 11 shell components)
+            }
+            if class_name in desktop_classes:
+                # logger.info("Desktop detected (class match)")
+                return True
+                
+        except Exception as e:
+            logger.info(f"Foreground window: handle={foreground_window}, error getting info: {str(e)}")
+        
+        # logger.info("Application detected (no desktop or app match)")
+        return False
+
+    def check_desktop_active(self):
+        """
+        Periodically check if desktop is active and update state
+        """
+        previous_state = self.is_desktop_active
+        self.is_desktop_active = self.is_on_desktop()
+        
+        # If desktop state changes, update tooltip
+        if previous_state != self.is_desktop_active:
+            if not self.is_desktop_active and self.tooltip.winfo_viewable():
+                self.hide_tooltip()
+            elif self.is_desktop_active and not self.tooltip.winfo_viewable():
+                self.update_tooltip_content()
+        
+        self.canvas.window.after(300, self.check_desktop_active)
 
     def setup_tooltip(self):
         self.tooltip = tk.Toplevel(self.canvas.window)
@@ -59,10 +145,16 @@ class InteractablePet(SimplePet):
         return canvas.create_polygon(points, **kwargs, smooth=True)
 
     def update_tooltip_content(self):
+        # Only show tooltip if desktop is active
+        if not self.is_desktop_active:
+            self.hide_tooltip()
+            return
+            
         animation = self.get_current_animation()
         if not animation.show_tooltip or not animation.list_message:
             self.hide_tooltip()
             return
+            
         message = animation.get_random_message()
         self.tooltip_label.configure(text=message)
         
@@ -78,7 +170,7 @@ class InteractablePet(SimplePet):
         self.tooltip.deiconify()
         if self.tooltip_after_id:
             self.canvas.window.after_cancel(self.tooltip_after_id)
-        display_time = random.randint(1000, 3000)  # Tối đa 3 giây
+        display_time = random.randint(1000, 3000)  # Maximum 3 seconds
         self.tooltip_after_id = self.canvas.window.after(display_time, self.update_tooltip_content)
 
     def update_tooltip_position(self):
@@ -145,7 +237,8 @@ class InteractablePet(SimplePet):
     def update(self):
         self.do_movement()
         super().update()
-        if random.random() < 0.3 and not self.tooltip.winfo_viewable():
+        # Only show random tooltips if desktop is active
+        if random.random() < 0.3 and not self.tooltip.winfo_viewable() and self.is_desktop_active:
             self.update_tooltip_content()
 
     def on_tick(self):
@@ -165,10 +258,11 @@ class InteractablePet(SimplePet):
             self.set_animation_state(AnimationStates.GRABBED)
 
     def stop_move(self, event):
-        available_states = list(self.animator.animations.keys())
+        excluded_states = {AnimationStates.WALK_POSITIVE_MANY, AnimationStates.WALK_NEGATIVE_MANY}
+        available_states = [state for state in self.animator.animations.keys() if state not in excluded_states]
         random_state = random.choice(available_states)
         self.set_animation_state(random_state)
-        logger.info(f"Random state after clicked: {random_state}")
+        # logger.info(f"Random state after clicked: {random_state}")
 
     def do_move(self, event):
         size = self.animator.animations[self.animator.state].target_resolution

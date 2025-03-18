@@ -47,7 +47,7 @@ class Animation:
         frame_multiplier: int = 1,
         target_resolution: Tuple[int, int] = (100, 100),
         reverse: bool = False,
-        list_message: List[str] = ["Chào Luuuu!", "Tớ là Totoro!", "Love you <3"],  # Thêm tham số list_message
+        list_message: List[str] = ["Hi Lu Xinh!", "Tớ là Totoro!", "Love you 3000"],  # Thêm tham số list_message
         show_tooltip: bool = True,       # Thêm tham số để bật/tắt tooltip
     ):
         """
@@ -82,7 +82,7 @@ class Animation:
             name = gif_location.split("src").pop() if gif_location is not None else name
             name = images_location.split("src").pop() if images_location is not None else name
         self.name = name
-        logger.info(f"Loading Animation: {self.name}")
+        # logger.info(f"Loading Animation: {self.name}")
 
         if frames is None:
             if gif_location is not None:
@@ -148,7 +148,7 @@ class Animation:
     @staticmethod
     def remove_partial_transparency_png(path: str) -> Image:
         """Force PNG transparency to fully opaque or fully transparent."""
-        logger.info("START:remove_partial_transparency_png -> " + path)
+        # logger.info("START:remove_partial_transparency_png -> " + path)
         png = Image.open(path)
         if path.split(".").pop().lower() != "png":
             return png

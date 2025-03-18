@@ -57,14 +57,14 @@ class SimplePet:
         """
         animation = self.get_current_animation()
         if self.animator.frame_number < len(animation.frames) - 1:
-            logger.debug("Frame repeating")
+            # logger.debug("Frame repeating")
             self.animator.frame_number += 1
         else:
-            logger.debug("Getting next state")
+            # logger.debug("Getting next state")
             self.animator.frame_number = 0
             self.set_animation_state(animation.next(self.animator))
 
-        logger.debug(f"{self.animator.state.__repr__()}, {self.animator.frame_number}")
+        # logger.debug(f"{self.animator.state.__repr__()}, {self.animator.frame_number}")
 
     def set_geometry(self):
         """Update the window position and scale to match that of the pet instance's location and size"""

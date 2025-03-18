@@ -21,7 +21,7 @@ class AnimationStates(Enum):
     RUN_POSITIVE = auto()
     RUN_POSITIVE_TIRED = auto()
     WALK_POSITIVE_RAIN = auto()
-    #DANCE
+    #RANDOM
     LOVE = auto()
     DANCE = auto()
     DRUM = auto()
