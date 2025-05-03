@@ -6,18 +6,21 @@ class AnimationStates(Enum):
 
     # Recommended all pets have these first few states
     IDLE = "nhun_nhay"
-    IDLE_TO_SLEEP = auto() #nam cong
-    SLEEP_TO_IDLE = auto() #nam cong
-    SLEEP = auto()
+    IDLE_TO_SLEEP_R = auto() #nam cong
+    SLEEP_TO_IDLE_R = auto() #nam cong
+    SLEEP_R = auto()
+    IDLE_TO_SLEEP_L = auto() #nam cong
+    SLEEP_TO_IDLE_L = auto() #nam cong
+    SLEEP_L = auto()
     #LEFT
     WALK_NEGATIVE = auto()
-    WALK_NEGATIVE_MANY = auto()
+    WALK_NEGATIVE_CV = auto()
     RUN_NEGATIVE = auto()
     RUN_NEGATIVE_TIRED = auto()
     WALK_NEGATIVE_RAIN = auto()
     #RIGHT
     WALK_POSITIVE = auto()
-    WALK_POSITIVE_MANY = auto()
+    WALK_POSITIVE_CV = auto()
     RUN_POSITIVE = auto()
     RUN_POSITIVE_TIRED = auto()
     WALK_POSITIVE_RAIN = auto()
@@ -29,6 +32,7 @@ class AnimationStates(Enum):
     GUITAR = auto()
     SWIM_RIGHT = auto()
     SWIM_LEFT = auto()
+    PHAO = auto()
     IDLE_TO_GRABBED = auto()  # OPTIONAL
     GRABBED = auto()
     GRAB_TO_FALL = auto()  # OPTIONAL

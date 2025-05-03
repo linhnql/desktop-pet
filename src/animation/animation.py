@@ -82,7 +82,7 @@ class Animation:
             name = gif_location.split("src").pop() if gif_location is not None else name
             name = images_location.split("src").pop() if images_location is not None else name
         self.name = name
-        # logger.info(f"Loading Animation: {self.name}")
+        logger.info(f"Loading Animation: {self.name}")
 
         if frames is None:
             if gif_location is not None:

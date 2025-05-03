@@ -256,7 +256,7 @@ class InteractablePet(SimplePet):
             self.set_animation_state(AnimationStates.GRABBED)
 
     def stop_move(self, event):
-        excluded_states = {AnimationStates.WALK_POSITIVE_MANY, AnimationStates.WALK_NEGATIVE_MANY}
+        excluded_states = {AnimationStates.WALK_POSITIVE, AnimationStates.WALK_NEGATIVE}
         available_states = [state for state in self.animator.animations.keys() if state not in excluded_states]
         random_state = random.choice(available_states)
         self.set_animation_state(random_state)
